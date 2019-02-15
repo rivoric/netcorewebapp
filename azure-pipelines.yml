@@ -6,14 +6,16 @@ pool:
   
 variables:
   buildConfiguration: 'Release'
+  projectFile: simple.web.app/simple.web.app/simple.web.app.csproj
 
 steps:
 
 # dotnet core build
 - script: |
-    dotnet build --configuration $(buildConfiguration)
-    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx
-    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
+    dotnet restore $(projectFile)
+    dotnet build --configuration $(buildConfiguration) $(projectFile)
+    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx $(projectFile)
+    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY $(projectFile)
 
 # publish test results
 - task: PublishTestResults@2
