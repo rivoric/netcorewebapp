@@ -1,6 +1,12 @@
 # Build ASP.NET Core project using Azure Pipelines
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core?view=vsts
 
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: rivoric/yamlbuildtemplate
+
 pool:
   vmImage: 'Ubuntu 16.04'
   
@@ -10,12 +16,11 @@ variables:
 
 steps:
 
-# dotnet core build
-- script: |
-    dotnet restore $(projectFile)
-    dotnet build --configuration $(buildConfiguration) $(projectFile)
-    dotnet test dotnetcore-tests --configuration $(buildConfiguration) --logger trx $(projectFile)
-    dotnet publish --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY $(projectFile)
+# build using a template
+- template: templates/build-dotnetcore.yml@templates
+  parameters:
+    projectFile: $(projectFile)
+    buildConfiguration: $(buildConfiguration)
 
 # publish test results
 - task: PublishTestResults@2
