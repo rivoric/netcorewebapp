@@ -17,6 +17,9 @@ variables:
 
 steps:
 
+# rename config template files
+- template: templates/rename-templatefiles.yml@templates
+
 # build using a template
 - template: templates/build-dotnetcore.yml@templates
   parameters:
