@@ -9,7 +9,7 @@ resources:
       endpoint: rivoric
 
 pool:
-  vmImage: 'Ubuntu 16.04'
+  vmImage: vs2017-win2016
   
 variables:
   buildConfiguration: 'Release'
@@ -22,13 +22,6 @@ steps:
   parameters:
     projectFile: $(projectFile)
     buildConfiguration: $(buildConfiguration)
-
-# publish test results
-- task: PublishTestResults@2
-  condition: succeededOrFailed()
-  inputs:
-    testRunner: VSTest
-    testResultsFiles: '**/*.trx'
 
 # pubish drop (build artifact)
 - task: PublishBuildArtifacts@1
